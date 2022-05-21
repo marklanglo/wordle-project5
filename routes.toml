@@ -1,0 +1,80 @@
+[http]
+  [http.middlewares]
+
+    [http.middlewares.word-validation-stripprefix.stripPrefix]
+      prefixes = ["/api/word-validation"]
+
+    [http.middlewares.answer-checking-stripprefix.stripPrefix]
+      prefixes = ["/api/answer-checking"]
+
+    [http.middlewares.stats-stripprefix.stripPrefix]
+      prefixes = ["/api/stats"]
+    
+    [http.middlewares.game-state-stripprefix.stripPrefix]
+      prefixes = ["/api/game-state"]
+
+    [http.middlewares.game-stripprefix.stripPrefix]
+      prefixes = ["/api/game"]
+
+  [http.routers]
+
+    [http.routers.word-validation-http]
+      entryPoints = ["http"]
+      service = "word-validation"
+      rule = "PathPrefix(`/api/word-validation`)"
+      middlewares = ["word-validation-stripprefix"]
+
+    [http.routers.answer-checking-http]
+      entryPoints = ["http"]
+      service = "answer-checking"
+      rule = "PathPrefix(`/api/answer-checking`)"
+      middlewares = ["answer-checking-stripprefix"]
+
+    [http.routers.stats-http]
+      entryPoints = ["http"]
+      service = "stats"
+      rule = "PathPrefix(`/api/stats`)"
+      middlewares = ["stats-stripprefix"]
+
+    [http.routers.game-state-http]
+      entryPoints = ["http"]
+      service = "game-state"
+      rule = "PathPrefix(`/api/game-state`)"
+      middlewares = ["game-state-stripprefix"]
+
+    [http.routers.game-http]
+      entryPoints = ["http"]
+      service = "game"
+      rule = "PathPrefix(`/api/game`)"
+      middlewares = ["game-stripprefix"]
+
+  [http.services]
+
+    [http.services.word-validation]
+      [http.services.word-validation.loadBalancer]
+        [[http.services.word-validation.loadBalancer.servers]]
+          url = "http://127.0.0.1:5000"
+
+    [http.services.answer-checking]
+      [http.services.answer-checking.loadBalancer]
+        [[http.services.answer-checking.loadBalancer.servers]]
+          url = "http://127.0.0.1:5100"
+
+    [http.services.stats]
+      [http.services.stats.loadBalancer]
+        [[http.services.stats.loadBalancer.servers]]
+          url = "http://127.0.0.1:5200"
+        [[http.services.stats.loadBalancer.servers]]
+          url = "http://127.0.0.1:5201"
+        [[http.services.stats.loadBalancer.servers]]
+          url = "http://127.0.0.1:5202"
+
+    [http.services.game-state]
+      [http.services.game-state.loadBalancer]
+        [[http.services.game-state.loadBalancer.servers]]
+          url = "http://127.0.0.1:5300"
+
+    [http.services.game]
+      [http.services.game.loadBalancer]
+        [[http.services.game.loadBalancer.servers]]
+          url = "http://127.0.0.1:5400"
